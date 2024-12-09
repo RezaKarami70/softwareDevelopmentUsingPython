@@ -7,10 +7,13 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-
+import DriftControlWindow
 
 class Ui_Form(object):
+
+    
     def setupUi(self, Form):
+        self.a = 0
         Form.setObjectName("Form")
         Form.resize(900, 600)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -77,11 +80,19 @@ class Ui_Form(object):
         self.closeButton = QtWidgets.QPushButton(parent=Form)
         self.closeButton.setGeometry(QtCore.QRect(770, 520, 101, 41))
         self.closeButton.setObjectName("closeButton")
+        self.pathButton = QtWidgets.QPushButton(parent=Form)
+        self.pathButton.setGeometry(QtCore.QRect(600, 520, 150, 41))
+        self.pathButton.setObjectName("pathButton")
 
         self.retranslateUi(Form)
-        self.closeButton.pressed.connect(Form.close) # type: ignore
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)        
 
+    
+        
+    def counter(self):
+        self.a = self.a + 1
+        self.lineEditStatus.setText(str(self.a))
+        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Home"))
@@ -90,8 +101,9 @@ class Ui_Form(object):
         self.connectButton.setText(_translate("Form", "Connect to Etabs"))
         self.driftControlButton.setText(_translate("Form", "Drift Control"))
         self.closeButton.setText(_translate("Form", "Close"))
-
-
+        self. pathButton.setText(_translate("Form", "Set path to files"))
+        
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
