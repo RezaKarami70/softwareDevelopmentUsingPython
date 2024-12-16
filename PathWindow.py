@@ -9,73 +9,84 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
+class PathWindowUi_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(939, 473)
+        Form.setAutoFillBackground
         icon = QtGui.QIcon.fromTheme("QIcon::ThemeIcon::DocumentProperties")
         Form.setWindowIcon(icon)
+        Form.setWindowTitle("Connection Settings")
+        Form.setMinimumSize(QtCore.QSize(940, 473))
+        Form.setMaximumSize(QtCore.QSize(940, 473))
+
+        
         self.label = QtWidgets.QLabel(parent=Form)
         self.label.setGeometry(QtCore.QRect(370, 10, 211, 81))
-        self.label.setObjectName("label")
+        self.label.setText("<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Connection Setting</span></p></body></html>")
+        
         self.label_2 = QtWidgets.QLabel(parent=Form)
         self.label_2.setGeometry(QtCore.QRect(30, 130, 121, 41))
-        self.label_2.setObjectName("label_2")
+        self.label_2.setText("<html><head/><body><p>Etabs installation<br/>path :</p></body></html>")
+
+        
         self.label_3 = QtWidgets.QLabel(parent=Form)
         self.label_3.setGeometry(QtCore.QRect(30, 190, 121, 41))
-        self.label_3.setObjectName("label_3")
+        self.label_3.setText("<html><head/><body><p>Model file path :</p></body></html>")
+        
         self.label_4 = QtWidgets.QLabel(parent=Form)
         self.label_4.setGeometry(QtCore.QRect(30, 250, 121, 41))
-        self.label_4.setObjectName("label_4")
+        self.label_4.setText("Model name :")
+        
         self.label_5 = QtWidgets.QLabel(parent=Form)
         self.label_5.setGeometry(QtCore.QRect(30, 310, 121, 41))
-        self.label_5.setObjectName("label_5")
+        self.label_5.setText("<html><head/><body><p>Folder path for<br/>saving results :</p></body></html>")
+        
         self.lineEditEtabsPath = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditEtabsPath.setGeometry(QtCore.QRect(150, 130, 771, 41))
+        self.lineEditEtabsPath.setGeometry(QtCore.QRect(150, 130, 631, 41))
         self.lineEditEtabsPath.setText("")
-        self.lineEditEtabsPath.setObjectName("lineEditEtabsPath")
+        self.lineEditEtabsPath.setReadOnly(True)
+        self.ButtonEditEtabsPath = QtWidgets.QPushButton(parent=Form)
+        self.ButtonEditEtabsPath.setGeometry(QtCore.QRect(800, 130, 121, 41))
+        self.ButtonEditEtabsPath.setText("Browse")
+
+
+        
         self.lineEditModelPath = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditModelPath.setGeometry(QtCore.QRect(150, 190, 771, 41))
+        self.lineEditModelPath.setGeometry(QtCore.QRect(150, 190, 631, 41))
         self.lineEditModelPath.setText("")
-        self.lineEditModelPath.setObjectName("lineEditModelPath")
+        self.ButtonEditModelPath = QtWidgets.QPushButton(parent=Form)
+        self.ButtonEditModelPath.setGeometry(QtCore.QRect(800, 190, 121, 41))
+        self.ButtonEditModelPath.setText("Browse")
+
+        
         self.lineEditModelName = QtWidgets.QLineEdit(parent=Form)
         self.lineEditModelName.setGeometry(QtCore.QRect(150, 250, 771, 41))
-        self.lineEditModelName.setText("")
-        self.lineEditModelName.setObjectName("lineEditModeNane")
+        self.lineEditModelName.setText("impoert model name")
+        self.lineEditModelName.setReadOnly(True)
+
+
+
+        
         self.lineEditSavePath = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditSavePath.setGeometry(QtCore.QRect(150, 310, 771, 41))
+        self.lineEditSavePath.setGeometry(QtCore.QRect(150, 310, 631, 41))
         self.lineEditSavePath.setText("")
-        self.lineEditSavePath.setObjectName("lineEditSavePath")
+        self.lineEditSavePath.setReadOnly(True)
+        self.ButtonEditSavePath = QtWidgets.QPushButton(parent=Form)
+        self.ButtonEditSavePath.setGeometry(QtCore.QRect(800, 310, 121, 41))
+        self.ButtonEditSavePath.setText("Browse")
+
         self.exitButton = QtWidgets.QPushButton(parent=Form)
         self.exitButton.setGeometry(QtCore.QRect(800, 390, 121, 41))
-        self.exitButton.setObjectName("exitButton")
+        self.exitButton.setText("Exit")
+
+        
         self.closeButton = QtWidgets.QPushButton(parent=Form)
         self.closeButton.setGeometry(QtCore.QRect(660, 390, 121, 41))
-        self.closeButton.setObjectName("closeButton")
+        self.closeButton.setText("Save and Close Path")
+
+        
         self.runButton = QtWidgets.QPushButton(parent=Form)
         self.runButton.setGeometry(QtCore.QRect(520, 390, 121, 41))
-        self.runButton.setObjectName("runButton")
-
-        self.retranslateUi(Form)
+        self.runButton.setText("Save and Run")
         QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Connection Settings"))
-        self.label.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Connection Setting</span></p></body></html>"))
-        self.label_2.setText(_translate("Form", "<html><head/><body><p>Etabs installation<br/>path :</p></body></html>"))
-        self.label_3.setText(_translate("Form", "<html><head/><body><p>Model file path :</p></body></html>"))
-        self.label_4.setText(_translate("Form", "Model name :"))
-        self.label_5.setText(_translate("Form", "<html><head/><body><p>Folder path for<br/>saving results :</p></body></html>"))
-        self.closeButton.setText(_translate("Form", " Save and Close"))
-        self.runButton.setText(_translate("Form", "Save and Run"))
-        self.exitButton.setText(_translate("Form", "Exit"))
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
-    sys.exit(app.exec())

@@ -7,108 +7,75 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-import DriftControlWindow
 
-class Ui_Form(object):
-
+class MainWindowUi_Form(object):
+    
+    drift_data_signal = QtCore.pyqtSignal(str, float, float)
     
     def setupUi(self, Form):
         self.a = 0
         Form.setObjectName("Form")
         Form.resize(900, 600)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
-        Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(900, 600))
         Form.setMaximumSize(QtCore.QSize(900, 600))
         icon = QtGui.QIcon.fromTheme("QIcon::ThemeIcon::EditPaste")
         Form.setWindowIcon(icon)
+        Form.setWindowTitle("Home")
+
+        
+        
         self.label = QtWidgets.QLabel(parent=Form)
-        self.label.setGeometry(QtCore.QRect(330, 20, 261, 81))
+        self.label.setGeometry(QtCore.QRect(330, 20, 260, 80))
         self.label.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
-        self.label.setObjectName("label")
+        self.label.setText("<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">TEST PROJECT</span><span style=\" font-size:12pt;\"><br/>By Reza Karami</span></p></body></html>")
+        
         self.label_2 = QtWidgets.QLabel(parent=Form)
-        self.label_2.setGeometry(QtCore.QRect(20, 120, 161, 41))
+        self.label_2.setGeometry(QtCore.QRect(20, 120, 180, 40))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
+        self.label_2.setText("<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Previously connected to:</span></p></body></html>")
+        
         self.lineEditPreConnect = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditPreConnect.setGeometry(QtCore.QRect(200, 120, 681, 41))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(28)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditPreConnect.sizePolicy().hasHeightForWidth())
-        self.lineEditPreConnect.setSizePolicy(sizePolicy)
-        self.lineEditPreConnect.setText("")
+        self.lineEditPreConnect.setGeometry(QtCore.QRect(220, 120, 660, 40))      
         self.lineEditPreConnect.setReadOnly(True)
-        self.lineEditPreConnect.setObjectName("lineEditPreConnect")
+        
         self.connectButton = QtWidgets.QPushButton(parent=Form)
-        self.connectButton.setGeometry(QtCore.QRect(20, 170, 161, 41))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.connectButton.sizePolicy().hasHeightForWidth())
-        self.connectButton.setSizePolicy(sizePolicy)
+        self.connectButton.setGeometry(QtCore.QRect(20, 170, 180, 40))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.connectButton.setFont(font)
-        self.connectButton.setObjectName("connectButton")
+        self.connectButton.setText("Connect And Run Model")
+        
+        
         self.lineEditStatus = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditStatus.setGeometry(QtCore.QRect(200, 170, 681, 41))
-        self.lineEditStatus.setText("")
+        self.lineEditStatus.setGeometry(QtCore.QRect(220, 170, 660, 40))
         self.lineEditStatus.setReadOnly(True)
-        self.lineEditStatus.setObjectName("lineEditStatus")
+        
+        
         self.driftControlButton = QtWidgets.QPushButton(parent=Form)
-        self.driftControlButton.setGeometry(QtCore.QRect(370, 290, 161, 41))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.driftControlButton.sizePolicy().hasHeightForWidth())
-        self.driftControlButton.setSizePolicy(sizePolicy)
+        self.driftControlButton.setGeometry(QtCore.QRect(370, 290, 160, 40))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.driftControlButton.setFont(font)
-        self.driftControlButton.setObjectName("driftControlButton")
+        self.driftControlButton.setText("Drift Control")
+        self.driftControlButton.setDisabled(True)
+        
         self.lineEditPreDrift = QtWidgets.QLineEdit(parent=Form)
-        self.lineEditPreDrift.setGeometry(QtCore.QRect(20, 350, 861, 41))
-        self.lineEditPreDrift.setText("")
+        self.lineEditPreDrift.setGeometry(QtCore.QRect(20, 350, 860, 40))
         self.lineEditPreDrift.setReadOnly(True)
-        self.lineEditPreDrift.setObjectName("lineEditPreDrift")
-        self.closeButton = QtWidgets.QPushButton(parent=Form)
-        self.closeButton.setGeometry(QtCore.QRect(770, 520, 101, 41))
-        self.closeButton.setObjectName("closeButton")
-        self.pathButton = QtWidgets.QPushButton(parent=Form)
-        self.pathButton.setGeometry(QtCore.QRect(600, 520, 150, 41))
-        self.pathButton.setObjectName("pathButton")
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)        
+        
+        self.closeButton = QtWidgets.QPushButton(parent=Form)
+        self.closeButton.setGeometry(QtCore.QRect(770, 520, 100, 40))
+        self.closeButton.setText("Close")
+        
+        self.pathButton = QtWidgets.QPushButton(parent=Form)
+        self.pathButton.setGeometry(QtCore.QRect(600, 520, 150, 40))
+        self. pathButton.setText("Set path to files")
+   
 
     
-        
-    def counter(self):
-        self.a = self.a + 1
-        self.lineEditStatus.setText(str(self.a))
-        
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Home"))
-        self.label.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">TEST PROJECT</span><span style=\" font-size:12pt;\"><br/>By Reza Karami</span></p></body></html>"))
-        self.label_2.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Previously connected to:</span></p></body></html>"))
-        self.connectButton.setText(_translate("Form", "Connect to Etabs"))
-        self.driftControlButton.setText(_translate("Form", "Drift Control"))
-        self.closeButton.setText(_translate("Form", "Close"))
-        self. pathButton.setText(_translate("Form", "Set path to files"))
+
         
         
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
-    sys.exit(app.exec())
