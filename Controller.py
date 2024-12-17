@@ -50,7 +50,7 @@ class Controller():
         self.view.driftControlWindow.my_signal.connect(self.mySlot)
         
 
-        self.view.app.exec()
+
             
 
      

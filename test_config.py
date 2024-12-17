@@ -2,6 +2,8 @@ import json
 import pytest
 import os
 import Controller as controller
+import Model as model
+from unittest.mock import MagicMock
 
 
 
@@ -22,3 +24,4 @@ def test_save_config_valid():
     pathFile = open("path.json")
     pathDict = json.load(pathFile)
     print(str(pathDict))
+

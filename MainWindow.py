@@ -10,7 +10,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 class MainWindowUi_Form(object):
     
-    drift_data_signal = QtCore.pyqtSignal(str, float, float)
     
     def setupUi(self, Form):
         self.a = 0

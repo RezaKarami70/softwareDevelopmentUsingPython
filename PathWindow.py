@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class PathWindowUi_Form(object):
+class PathWindowUi_Form(QtWidgets.QMainWindow):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(939, 473)
