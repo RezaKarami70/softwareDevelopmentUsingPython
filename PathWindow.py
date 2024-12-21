@@ -19,29 +19,33 @@ class PathWindowUi_Form(QtWidgets.QMainWindow):
         Form.setWindowTitle("Connection Settings")
         Form.setMinimumSize(QtCore.QSize(940, 473))
         Form.setMaximumSize(QtCore.QSize(940, 473))
-
         
+        # set MAin Label to Window
         self.label = QtWidgets.QLabel(parent=Form)
         self.label.setGeometry(QtCore.QRect(370, 10, 211, 81))
         self.label.setText("<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Connection Setting</span></p></body></html>")
         
+        #set label for installation path
         self.label_2 = QtWidgets.QLabel(parent=Form)
         self.label_2.setGeometry(QtCore.QRect(30, 130, 121, 41))
         self.label_2.setText("<html><head/><body><p>Etabs installation<br/>path :</p></body></html>")
-
         
+        #set label for model path
         self.label_3 = QtWidgets.QLabel(parent=Form)
         self.label_3.setGeometry(QtCore.QRect(30, 190, 121, 41))
         self.label_3.setText("<html><head/><body><p>Model file path :</p></body></html>")
         
+        #set label for model name
         self.label_4 = QtWidgets.QLabel(parent=Form)
         self.label_4.setGeometry(QtCore.QRect(30, 250, 121, 41))
         self.label_4.setText("Model name :")
         
+        #set label for report path
         self.label_5 = QtWidgets.QLabel(parent=Form)
         self.label_5.setGeometry(QtCore.QRect(30, 310, 121, 41))
         self.label_5.setText("<html><head/><body><p>Folder path for<br/>saving results :</p></body></html>")
         
+        #set browser button and line ro searchin files and directories
         self.lineEditEtabsPath = QtWidgets.QLineEdit(parent=Form)
         self.lineEditEtabsPath.setGeometry(QtCore.QRect(150, 130, 631, 41))
         self.lineEditEtabsPath.setText("")
@@ -49,8 +53,6 @@ class PathWindowUi_Form(QtWidgets.QMainWindow):
         self.ButtonEditEtabsPath = QtWidgets.QPushButton(parent=Form)
         self.ButtonEditEtabsPath.setGeometry(QtCore.QRect(800, 130, 121, 41))
         self.ButtonEditEtabsPath.setText("Browse")
-
-
         
         self.lineEditModelPath = QtWidgets.QLineEdit(parent=Form)
         self.lineEditModelPath.setGeometry(QtCore.QRect(150, 190, 631, 41))
@@ -59,7 +61,6 @@ class PathWindowUi_Form(QtWidgets.QMainWindow):
         self.ButtonEditModelPath.setGeometry(QtCore.QRect(800, 190, 121, 41))
         self.ButtonEditModelPath.setText("Browse")
 
-        
         self.lineEditModelName = QtWidgets.QLineEdit(parent=Form)
         self.lineEditModelName.setGeometry(QtCore.QRect(150, 250, 771, 41))
         self.lineEditModelName.setText("impoert model name")
@@ -67,7 +68,6 @@ class PathWindowUi_Form(QtWidgets.QMainWindow):
 
 
 
-        
         self.lineEditSavePath = QtWidgets.QLineEdit(parent=Form)
         self.lineEditSavePath.setGeometry(QtCore.QRect(150, 310, 631, 41))
         self.lineEditSavePath.setText("")
@@ -76,17 +76,21 @@ class PathWindowUi_Form(QtWidgets.QMainWindow):
         self.ButtonEditSavePath.setGeometry(QtCore.QRect(800, 310, 121, 41))
         self.ButtonEditSavePath.setText("Browse")
 
+        
+        # set button for actions
         self.exitButton = QtWidgets.QPushButton(parent=Form)
         self.exitButton.setGeometry(QtCore.QRect(800, 390, 121, 41))
         self.exitButton.setText("Exit")
 
-        
         self.closeButton = QtWidgets.QPushButton(parent=Form)
         self.closeButton.setGeometry(QtCore.QRect(660, 390, 121, 41))
         self.closeButton.setText("Save and Close Path")
 
-        
         self.runButton = QtWidgets.QPushButton(parent=Form)
         self.runButton.setGeometry(QtCore.QRect(520, 390, 121, 41))
         self.runButton.setText("Save and Run")
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form) #signal slot to main window
+        
+        self.CatchButton = QtWidgets.QPushButton(parent=Form)
+        self.CatchButton.setGeometry(QtCore.QRect(374, 75, 211, 41))
+        self.CatchButton.setText("Run Open Model")

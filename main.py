@@ -1,7 +1,12 @@
-import Controller, sys
-
-from PyQt6 import QtWidgets
+import Controller
 
 
-Control = Controller.Controller()
-Control.view.app.exec()
+def main():
+
+    Control = Controller.Controller()
+    Control.view.app.exec()
+
+
+if __name__=="__main__":
+    main()
+    

@@ -20,8 +20,7 @@ def test_save_config_valid():
     con = controller.Controller()
     con.pathDict = data
     con.saveJson()
-    print(data)
     pathFile = open("path.json")
     pathDict = json.load(pathFile)
-    print(str(pathDict))
+    assert data == pathDict
 

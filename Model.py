@@ -1,20 +1,29 @@
 import os, comtypes.client, json
 import pandas as pd
-import ctypes
-from ctypes import wintypes
 
 
 class Model():
+
     
-    ConnectionsTATUS = False
+    def getModel(self):
+        try:
+            self.helper = comtypes.client.CreateObject('ETABSv1.Helper')
+            self.helper = self.helper.QueryInterface(comtypes.gen.ETABSv1.cHelper)
+            self.myETABSObject = self.helper.GetObject("CSI.ETABS.API.ETABSObject")
+            self.SapModel = self.myETABSObject.SapModel
+            self.ret = self.SapModel.Analyze.RunAnalysis()               
+            return True     
+        except (TypeError, AttributeError) as e:
+            return False
+        
+        
+
 
     def runModel(self):
-        self.pathFile = open("path.json")
-        self.pathDict = json.load(self.pathFile)
+        with open("path.json", "r") as self.pathFile:
+            self.pathDict = json.load(self.pathFile)
         self.helper = comtypes.client.CreateObject('ETABSv1.Helper')
         self.helper = self.helper.QueryInterface(comtypes.gen.ETABSv1.cHelper)
-
-            
 
         try:
             #get the active ETABS object
@@ -34,7 +43,7 @@ class Model():
     def ExitEtabs(self):
         self.myETABSObject.ApplicationExit(False)
        
-    
+    """
     def storyElev(self):
         NumberResults = 0
         Stories = []
@@ -64,26 +73,25 @@ class Model():
         elevs.reverse()
         return elevs        
         
+    """
 
         
         
-        
+    #get all load combinaions
     def ComboName(self):
-        
         NumberCombo = 0
         ComboNames = []
         [NumberCombo, ComboNames,ret] = self.SapModel.RespCombo.GetNameList(NumberCombo, ComboNames)
         return ComboNames
         
-
+    #get all loads
     def LoadName(self):
-        
         NumberCombo = 0
         ComboNames = []
         [NumberCombo, ComboNames,ret] = self.SapModel.LoadCases.GetNameList(NumberCombo, ComboNames)
         return ComboNames
         
-       
+    """
     def SelectedComcoStoryDriftResults(self, Combo):
         self.StoryDrifts = []
         self.ret = self.SapModel.Results.Setup.DeselectAllCasesAndCombosForOutput()
@@ -116,8 +124,9 @@ class Model():
         dfDrop = df.sort_values('1000*Drift').drop_duplicates(subset=['Story', 'Direction'], keep='last')
         print(dfDrop)
         return dfDrop
+    """
     
-    
+    """
     def SelectedLoadStoryDriftResults(self, Combo):
         self.StoryDrifts = []
         self.ret = self.SapModel.Results.Setup.DeselectAllCasesAndCombosForOutput()
@@ -150,11 +159,92 @@ class Model():
         dfDrop = df.sort_values('1000*Drift').drop_duplicates(subset=['Story', 'Direction'], keep='last')
         print(dfDrop)
         return dfDrop
+    """
     
     def storyDispForCombo(self, combo):
-        # returns dataframe of torsion results for drift combinations
-        self.JointDisplacements = []
+        self.ret = self.SapModel.DatabaseTables.SetLoadCombinationsSelectedForDisplay([combo])
         try:
+            TableKey = 'Diaphragm Max Over Avg Drifts'
+            FieldKeyList = []
+            GroupName = str()
+            TableVersion = 0
+            FieldsKeysIncluded =[]
+            NumberRecords = 0
+            TableData = [] #table of Diaphragm Max Over Avg Drifts
+            [GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, TableData, ret] = self.SapModel.DatabaseTables.GetTableForDisplayArray(TableKey, FieldKeyList,GroupName,TableVersion, FieldsKeysIncluded, NumberRecords, TableData)
+            tableDrift = []
+            if TableData[3] == "Max" or TableData[3] == "Min":
+                for i in range(0, (len(TableData)), 12):
+                    tableDrift.append([TableData[i],TableData[i+4][-1],(1000*float(TableData[i+5]))])
+            else:
+                for i in range(0, (len(TableData)), 11):
+                    tableDrift.append([TableData[i],TableData[i+3][-1],(1000*float(TableData[i+4]))])                
+            
+            TableKey = 'Diaphragm Center Of Mass Displacements'
+            FieldKeyList = []
+            GroupName = str()
+            TableVersion = 0
+            FieldsKeysIncluded =[]
+            NumberRecords = 0
+            TableData = [] #table of Diaphragm Center Of mass Displacements
+            [GroupName, TableVersion, FieldsKeysIncluded, NumberRecords, TableData, ret] = self.SapModel.DatabaseTables.GetTableForDisplayArray(TableKey, FieldKeyList,GroupName,TableVersion, FieldsKeysIncluded, NumberRecords, TableData)
+            tableDisplacement = []
+            if TableData[4] == "Max" or TableData[4] == "Min":
+                for i in range(0, (len(TableData)), 12):
+                    tableDisplacement.append([TableData[i],(25.4*float(TableData[i+5])),(25.4*float(TableData[i+6]))]) #change inches to millimeters
+            else:
+                for i in range(0, (len(TableData)), 11):
+                    tableDisplacement.append([TableData[i],(25.4*float(TableData[i+4])),(25.4*float(TableData[i+5]))]) #change inches to millimeters
+ 
+                
+            NumberStories = 0
+            StoryNames = []
+            StoryHeights = []
+            StoryElevations = []
+            IsMasterStory = []
+            SimilarToStory = []
+            SpliceAbove = []
+            SpliceHeight = []
+            ret = self.SapModel.Story.GetStories(NumberStories, StoryNames, StoryHeights, StoryElevations, IsMasterStory, SimilarToStory, SpliceAbove, SpliceHeight)
+            storiesName = ret[1]
+            StoryElevations = ret[2]
+            
+            
+            labels = ['Story', "elevation", '1000DispX', '1000DispY', "1000DriftX", "1000DriftY"] #lable of data Frame
+            table = []         
+            k = 0
+            # merg Diplacement list and Drift list 
+            for story in storiesName:
+                elev = StoryElevations[k]
+                disX = 0
+                disY = 0
+                DriftX = 0
+                DriftY = 0
+                for dis in tableDisplacement:
+                    if dis[0] == story:
+                        dX = dis[1]
+                        dY = dis[2]
+                        if abs(dX) > abs(disX):
+                            disX = dX
+                        if abs(dY) > abs(disY):
+                            disY = dY
+                        
+                for dif in tableDrift:
+                    if dif[0] == story:
+                        if dif[1] == "X":
+                            DriftX = dif[2]
+                        if dif[1]  == "Y":
+                            DriftY = dif[2]
+                table.append([story, elev,  disX, disY, DriftX, DriftY])
+                k += 1
+                
+            df = pd.DataFrame.from_records(table, columns=labels).sort_index() #create dataframe
+            return df
+        except Exception as e:
+            self.ConnectionsTATUS = False
+            return
+            
+        """
             ret = self.SapModel.Results.Setup.DeselectAllCasesAndCombosForOutput()
             ret = self.SapModel.Results.Setup.SetComboSelectedForOutput(combo)
             
@@ -183,10 +273,7 @@ class Model():
             # set up pandas data frame and sort by drift column
             jlabels = ['label', 'Story', 'Combo', '1000DispX', '1000DispY', "1000DriftX", "1000DriftY"]
             jdf = pd.DataFrame.from_records(self.JointDisplacements, columns=jlabels)
-            return jdf
-        except Exception as e:
-            self.ConnectionsTATUS = False
-            return
+            return jdf 
     
     def StoryLevelS(self):
         NumberStories = 0
@@ -200,3 +287,4 @@ class Model():
         
         ret = self.SapModel.Story.GetStories(NumberStories, StoryNames, StoryHeights, StoryElevations, IsMasterStory, SimilarToStory, SpliceAbove, SpliceHeight)
         return StoryElevations
+            """

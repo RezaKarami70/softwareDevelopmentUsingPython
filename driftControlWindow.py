@@ -28,8 +28,9 @@ class DriftControlWindowUi_Form(QObject):
         self.plot = pg.PlotWidget(parent=Form)
         self.plot.setGeometry(QtCore.QRect(250, 70, 440, 541))
         self.plot.addLegend()
-        self.plot.setLabel('bottom', 'Level', units='m')  # x-axis label
-        self.plot.setLabel('left', 'Drift', units='mm')  # y-axis label
+        self.plot.setTitle('Maxumim')
+        self.plot.setLabel('bottom', 'Drift', units='mm')  # x-axis label
+        self.plot.setLabel('left', 'Level', units='m')  # y-axis label
         #self.plot.setBackground(pg.mkColor((255, 255, 255, 255)))
 
         
@@ -53,10 +54,20 @@ class DriftControlWindowUi_Form(QObject):
         self.listWidget = QtWidgets.QListWidget(parent=Form)
         self.listWidget.setGeometry(QtCore.QRect(15, 71, 221, 541))
 
-    
-        
         self.tableWidget = QtWidgets.QTableWidget(parent=Form)
         self.tableWidget.setGeometry(QtCore.QRect(700, 70, 310, 541))
+        
+        self.ra= QtWidgets.QRadioButton(parent=Form)
+        self.ra.setText("Show Drifts")
+        self.ra.setChecked(True)
+        self.rb= QtWidgets.QRadioButton(parent=Form)
+        self.rb.setText("Show Displacements")
+        self.ra.setGeometry(QtCore.QRect(700, 20, 190, 41))
+        self.rb.setGeometry(QtCore.QRect(800, 20, 210, 41))
+
+        self.selectoin = QtWidgets.QButtonGroup()
+        self.selectoin.addButton(self.ra)
+        self.selectoin.addButton(self.rb)      
 
 
     def emit_signal(self, text):
