@@ -10,7 +10,7 @@ from openpyxl.utils import get_column_letter
 
 class Controller():
     
-    #check is the path file exists or not and create it if not exists 
+    '''check is the path file exists or not and create it if not exists'''
     while True:
         try:
             with open("path.json", "r") as pathFile:
@@ -29,15 +29,16 @@ class Controller():
             break
         
         
-    #initionallaiz mode and view and show first window and actions
     def __init__(self):
+        '''initionallaiz mode and view and show first window and actions'''
         self.view = View.view()
         self.model =  Model.Model()
         self.fillPathWindow()
         self.bottom_Action()
         
-    #all actions in the 
+        
     def bottom_Action(self):
+        '''all actions and signalls are here'''
         self.view.pathWindow.exitButton.pressed.connect(self.pathWindowExitButtonAction)
         self.view.pathWindow.closeButton.pressed.connect(self.pathWindowCloseButtonAction)
         self.view.pathWindow.runButton.pressed.connect(self.pathWindowRunButtonAction)
@@ -55,8 +56,8 @@ class Controller():
         self.view.pathWindow.CatchButton.pressed.connect(self.getModelAndRun)
         self.view.driftControlWindow.selectoin.buttonClicked.connect(self.sellectLoadCombAction)
         
-    #chatch an runing mode
     def getModelAndRun(self):
+        '''catch a model and run it user ressed Yes and breack if sellect cancel'''
         if self.wariningMessageWindow() == QtWidgets.QMessageBox.StandardButton.Cancel:
             return #cancel the running etabs and return 
         self.view.pathWindowForm.setDisabled(True)
@@ -78,55 +79,55 @@ class Controller():
             mesgBox.setText("No running Etbas found")
             mesgBox.exec()
     
-    #popup message for running etabs 
     def wariningMessageWindow(self):
+        '''popup message for running etabs and retune it'''
         runMessage = QtWidgets.QMessageBox()
         runMessage.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Cancel)
         runMessage.setText("Do you want to Run Etabs")
         ret = runMessage.exec()
         return ret
 
-    # load a json file for path handeling    
     def loadJson(self):
+        '''load a json file for path handeling''' 
         with open("path.json", "r") as pathFile:
             self.pathDict = json.load(pathFile)
             path = self.pathDict
         return path
         
-    # save a dictionary as json file for path hanadling
+    
     def saveJson(self):
+        '''save a dictionary as json file for path hanadling'''
         with open("path.json", "w") as pathFile:
             json.dump(self.pathDict, pathFile)
         return True
     
-    # show first window and fill the path text lines
     def fillPathWindow(self):
+        '''show first window and fill the path text lines'''
         self.view.pathWindow.lineEditEtabsPath.setText(self.pathDict["etabs_path"])
         self.view.pathWindow.lineEditModelPath.setText(self.pathDict["model_path"])
         self.view.pathWindow.lineEditModelName.setText(self.pathDict["model_name"])
         self.view.pathWindow.lineEditSavePath.setText(self.pathDict["folder_path"])
         self.view.pathWindowForm.show()
     
-    #close and exit the software
     def pathWindowExitButtonAction(self):
+        '''close and exit the software'''
         self.view.pathWindowForm.close()
         
-    #update dict path for ready to save
     def readJsonFile(self):
+        '''update dict path for ready to save as jason file'''
         self.pathDict["etabs_path"] = self.view.pathWindow.lineEditEtabsPath.text()
         self.pathDict["model_path"] = self.view.pathWindow.lineEditModelPath.text()
         self.pathDict["model_name"] = self.view.pathWindow.lineEditModelName.text()
         self.pathDict["folder_path"] = self.view.pathWindow.lineEditSavePath.text()
         
-    #save and 
     def pathWindowCloseButtonAction(self):
+        '''save pathes and close path window and the software'''
         self.readJsonFile()
         self.saveJson()
         self.view.pathWindowForm.close()
     
-    #Runing an open model or open and running a model  
     def pathWindowRunButtonAction(self):
-        
+        '''runing an open model or open and running a model from pathes imported whit user'''
         self.readJsonFile()
         self.view.pathWindowForm.close()
         #checking etabs software is exict or not
@@ -152,22 +153,22 @@ class Controller():
         self.view.mainWindow.lineEditStatus.setText(str(self.pathDict["model_path"]))
         self.view.mainWindowForm.show()
 
-    #pop up message for directory
     def WariningMessage(self, message):
-            mesgBox = QtWidgets.QMessageBox()
-            mesgBox.setText(message)
-            mesgBox.exec()
+        '''pop up message for directory'''
+        mesgBox = QtWidgets.QMessageBox()
+        mesgBox.setText(message)
+        mesgBox.exec()
 
 
-    #close drift window and emit signal for the main window 
     def driftControlWindowCloseACtions(self):
+        '''close drift window and emit signal for the main window'''
         self.view.driftControlWindow.emit_signal(self.update_label())#emit text to first window
         self.view.mainWindowForm.show()
         self.view.driftControlWindowForm.close()
 
 
-    # close main window and show drift control window
     def mainWindowDriftControlButtonAction(self):
+        '''close main window and show drift control window and fill list of combiations'''
         self.view.mainWindow.closeButton.setDisabled(True) 
         self.view.mainWindow.connectButton.setDisabled(True)
         self.view.mainWindow.pathButton.setDisabled(True)
@@ -180,15 +181,16 @@ class Controller():
         self.view.driftControlWindow.line.setReadOnly = False
         self.view.driftControlWindowForm.show()
         self.view.mainWindowForm.hide()
-        mesgBox = QtWidgets.QMessageBox()
+        mesgBox = QtWidgets.QMessageBox()# wrining message
         mesgBox.setText("Pleas dont open Table in etabs")
         mesgBox.exec()
     
     def mainWindowCloseButtenAction(self):
+        '''close the main window and close the software'''
         self.view.mainWindowForm.close()
 
-
     def mainWindowpathButtonAction(self):
+        '''retun from main window to path window'''
         self.view.mainWindow.driftControlButton.setDisabled(True)
         self.view.mainWindow.lineEditPreDrift.setText("")
         self.view.driftControlWindow.listWidget.clear()
@@ -200,7 +202,9 @@ class Controller():
         self.view.mainWindowForm.close()
         self.fillPathWindow()
         
+    
     def mainWindowConnectButtonAction(self):
+        '''connecting to etabs and run analysis in main window update jason file for previous connection'''
         if self.wariningMessageWindow() == QtWidgets.QMessageBox.StandardButton.Cancel:
             return #return if the uuser not want to run the etabs 
         self.view.mainWindow.closeButton.setDisabled(True)
@@ -217,14 +221,14 @@ class Controller():
         with open("path.json", "w") as pathFile:# saving the current model as pre-connected model file
             json.dump(self.pathDict, pathFile)
 
-    #sellecting directory methode
     def selectDirectory(self):
+        '''sellecting directory methode and return path'''
         self.dialog = QtWidgets.QFileDialog()
         self.folder_path = self.dialog.getExistingDirectory(None, "Select Folder")
         return self.folder_path
 
-    #sellecting EDB file methode 
     def selectFile(self):
+        '''sellecting EDB file methode and return model name and model path in a list'''
         self.dialog = QtWidgets.QFileDialog(caption="Choose File")
         file_filter = "ETABS Models (*.EDB)"
         self.filedir = self.dialog.getOpenFileNames(None, "Choose File", "", file_filter)
@@ -235,26 +239,26 @@ class Controller():
             return ["", ""]
         
 
-    #set directory to etabs path llne edit
     def ButtonEditEtabsPathAction(self):
-        if not self.path == "":
-            self.path = self.selectDirectory()
-            self.view.pathWindow.lineEditEtabsPath.setText(self.path)
+        '''set directory to etabs path line edit'''
+        path = self.selectDirectory()
+        if not path == "":
+            self.view.pathWindow.lineEditEtabsPath.setText(path)
 
-    #set directory to mode path llne edit
     def ButtonEditModelPathAction(self):
+        '''set directory to mode path llne edit'''
         path = self.selectFile()
         if not path[0] == "":
             self.view.pathWindow.lineEditModelName.setText(path[0])
             self.view.pathWindow.lineEditModelPath.setText(path[1])
         
-    #set diretory to report path line edit
     def ButtonEditSavePathAction(self):
+        '''set diretory to report path line edit'''
         path = self.selectDirectory()
         self.view.pathWindow.lineEditSavePath.setText(path)
         
-    #adding all load combinations to list in drift control window
     def fillCombolist(self):        
+        '''adding all load combinations to list in drift control window'''
         combosName = self.model.ComboName() #getings all load combinations names
         index = 0
         for comboName in combosName:
@@ -264,8 +268,10 @@ class Controller():
             index += 1
             item.setText(str(comboName))
             
-            
+    
     def fillComboTableAndLine(self):
+        '''fill the table whit sellecet load combination in the drift control window list
+        items by items'''
         self.view.driftControlWindow.tableWidget.setRowCount(len(self.storyslist))
         # seting width of 5 columns of tabls
         self.view.driftControlWindow.tableWidget.setColumnCount(5)
@@ -284,19 +290,19 @@ class Controller():
             try:
                 XDrift = self.dfTable[( self.dfTable["Story"] == story)]['1000DriftX'].max().round(3)
             except(IndexError):
-                XDrift = 0.0    #if etabs not return value for X drift in this story set 0.0 to the it
+                XDrift = 0.0    #if etabs not return value for X drift in this story set 0.0 to it
             try:
                 YDrift =  self.dfTable[( self.dfTable["Story"] == story)]['1000DriftY'].max().round(3)
             except(IndexError):
-                YDrift = 0.0    #if etabs not return value for Y drift in this story set 0.0 to the it
+                YDrift = 0.0    #if etabs not return value for Y drift in this story set 0.0 to it
             try:
                 Xdisp =  self.dfTable[( self.dfTable["Story"] == story)]['1000DispX'].max().round(3)
             except(IndexError):
-                Xdisp = 0.0     #if etabs not return value for X dis in this story set 0.0 to the it
+                Xdisp = 0.0     #if etabs not return value for X dis in this story set 0.0 to it
             try:
                 Ydisp =  self.dfTable[( self.dfTable["Story"] == story)]['1000DispY'].max().round(3)
             except(IndexError):
-                Ydisp = 0.0     #if etabs not return value for Y dis in this story set 0.0 to the it
+                Ydisp = 0.0     #if etabs not return value for Y dis in this story set 0.0 to it
                 
             #calc max X and Y displacement
             if abs(self.maxDispX) < abs(Xdisp):
@@ -324,8 +330,9 @@ class Controller():
                 counter2 += 1
             
             counter1 += 1
-            
+    
     def fillGraphForComboDis(self):
+        '''fill the Graph for Displacement of sellected Laod'''
         self.view.driftControlWindow.plot.clear()
         ListX = self.dfTable['1000DispX'].to_list() #list of displacement X in milimeters
         ListY = self.dfTable['1000DispY'].to_list() #list of displacement Y in milimeters
@@ -384,6 +391,7 @@ class Controller():
         
 
     def fillGraphForComboDrift(self):
+        '''fill the Graph for Drift of sellected Laod'''
         self.view.driftControlWindow.plot.clear() #clear last plot
         ListX = self.dfTable['1000DriftX'].to_list() #list of X drift
         ListY = self.dfTable['1000DriftY'].to_list() #list of Y Drift
@@ -427,6 +435,7 @@ class Controller():
         
     # action of sellected item in ist of control window change
     def sellectLoadCombAction(self):
+        '''When a load is selected Graph and table is fll with this function'''
         try:
             self.dfTable = self.model.storyDispForCombo(self.view.driftControlWindow.listWidget.currentItem().text())
             self.storyslist = self.dfTable["Story"].to_list()
@@ -436,7 +445,8 @@ class Controller():
             if self.view.driftControlWindow.rb.isChecked(): #if radio button of Displacement is checked
                 self.fillGraphForComboDis()  
                 self.view.driftControlWindow.label_2.setText("Critcal Displacment is " + str(self.calcdisThreshold()) + "mm (Not true only fo cheking the app)")
-            self.fillComboTableAndLine()    
+            self.fillComboTableAndLine()  
+
         except Exception as e:
             self.view.driftControlWindow.tableWidget.clear()
             self.view.driftControlWindow.plot.clear()
@@ -444,7 +454,9 @@ class Controller():
             mesgBox.setText("DisConneted from etabs, Close etabs and Connect again.")
             mesgBox.exec()
 
+
     def reportToExcel(self):
+        '''create an Ecxcel file in selected directory with imported name'''
         #check name of excel file is import or not in a pop up window
         if self.view.driftControlWindow.line.text() == "":
             mesgBox = QtWidgets.QMessageBox()
@@ -535,6 +547,7 @@ class Controller():
         
         
     def calcDriftThreshold(self):
+        '''calculates the Threshold for Drifts'''
         elev = self.dfTable['elevation'].to_list()
         if len(elev) -1 < 5:
             return 1000*0.025*max(elev)/400
@@ -543,6 +556,7 @@ class Controller():
             return 1000*0.02*max(elev)/400
         
     def calcdisThreshold(self):
+        '''calculates the Threshold for Displacements'''
         elev = self.dfTable['elevation'].to_list()
         return 1000*0.0005*max(elev)
 
@@ -550,6 +564,7 @@ class Controller():
 
         
     def update_label(self):
+        '''sent Max Displacement to the main window'''
         # Update the label with the received text
         try:
             preText = "for load " + self.view.driftControlWindow.listWidget.currentItem().text() + "Max Displacement for X=" + str("%.3f" % self.maxDispX) + "mm and for Y=" + str("%.3f" % self.maxDispY) + "mm"
@@ -557,5 +572,6 @@ class Controller():
         except AttributeError:
             return ""
     
-    def mySlot(self, text): #sending signal to the main window
+    def mySlot(self, text):
+        '''sending signal to the main window'''
         self.view.mainWindow.lineEditPreDrift.setText(text)
